@@ -159,7 +159,12 @@ class vsftpd::params {
   $cmds_allowed            = ''
   $setproctitle_enable     = false
   $pasv_promiscuous        = false
-  $seccomp_sandbox         = true
+  if $::osfamily == 'RedHat' and versioncmp($::lsbmajdistrelease, '7') == -1 {
+    # On rhel 6 seccomp_sandbox option is not available
+    $seccomp_sandbox = false
+  } else {
+    $seccomp_sandbox = true
+  }
 
   $port = '21'
   $protocol = 'tcp'
